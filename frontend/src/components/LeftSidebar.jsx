@@ -1,8 +1,7 @@
 "use client";
 
 import { Bell, Home, MessageCircle, User, Users, Video } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -13,12 +12,13 @@ const menuItems = [
   { href: "/friends-list", icon: Users, title: "Bạn bè" },
   { href: "/video-feed", icon: Video, title: "Video" },
   { href: "/messages", icon: MessageCircle, title: "Tin nhắn" },
-  { href: "/profile", icon: User, title: "Trang cá nhân" },
+  { href: "/user-profile", icon: User, title: "Trang cá nhân" },
   { href: "/notifications", icon: Bell, title: "Thông báo" },
 ];
 
 export default function LeftSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const { isSidebarOpen, closeSidebar } = useSidebarStore();
 
   return (
@@ -57,17 +57,19 @@ export default function LeftSidebar() {
               const isActive = pathname === item.href;
               return (
                 <li key={item.title}>
-                  <Link href={item.href} onClick={closeSidebar}>
-                    <Button
-                      className={`w-full justify-start gap-3 ${
-                        isActive ? "bg-muted text-blue-500" : "text-foreground"
-                      }`}
-                      variant="ghost"
-                    >
-                      <item.icon className="size-5" />
-                      <span>{item.title}</span>
-                    </Button>
-                  </Link>
+                  <Button
+                    className={`w-full justify-start gap-3 ${
+                      isActive ? "bg-muted text-blue-500" : "text-foreground"
+                    }`}
+                    onClick={() => {
+                      router.push(item.href);
+                      closeSidebar();
+                    }}
+                    variant="ghost"
+                  >
+                    <item.icon className="size-5" />
+                    <span>{item.title}</span>
+                  </Button>
                 </li>
               );
             })}

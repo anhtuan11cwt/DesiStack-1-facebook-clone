@@ -20,7 +20,7 @@ import {
   NativeSelectOption,
 } from "@/components/ui/native-select";
 
-export default function ProfileHeader({ profile }) {
+export default function ProfileHeader({ profile, userId }) {
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [isEditCoverOpen, setIsEditCoverOpen] = useState(false);
   const [coverPreview, setCoverPreview] = useState(null);
@@ -32,6 +32,9 @@ export default function ProfileHeader({ profile }) {
   const [formGender, setFormGender] = useState(profile.gender);
   const coverInputRef = useRef(null);
   const avatarInputRef = useRef(null);
+  const maxDate = new Date();
+  maxDate.setFullYear(maxDate.getFullYear() - 18);
+  const maxDateStr = maxDate.toISOString().split("T")[0];
 
   const handleCoverChange = (e) => {
     const file = e.target.files[0];
@@ -101,6 +104,9 @@ export default function ProfileHeader({ profile }) {
           <p className="text-muted-foreground text-sm">
             {profile.friendsCount} bạn bè
           </p>
+          {userId && (
+            <p className="text-muted-foreground text-xs">ID: {userId}</p>
+          )}
         </div>
 
         {/* Edit profile button */}
@@ -175,6 +181,7 @@ export default function ProfileHeader({ profile }) {
               <Input
                 className="mt-1"
                 id="profile-birthday"
+                max={maxDateStr}
                 onChange={(e) => setFormBirthday(e.target.value)}
                 type="date"
                 value={formBirthday}

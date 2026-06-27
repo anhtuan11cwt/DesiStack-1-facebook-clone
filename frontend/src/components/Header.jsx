@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import {
   LayoutDashboard,
   LogOut,
@@ -14,8 +15,7 @@ import {
   Video,
   X,
 } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useState } from "react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -38,10 +38,13 @@ const navigation = [
 
 export default function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const { theme, setTheme } = useTheme();
   const [_isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const { toggleSidebar } = useSidebarStore();
+
+  const handleNavigation = (path) => () => router.push(path);
 
   return (
     <header className="fixed top-0 right-0 left-0 z-50 h-16 border-b bg-background shadow-sm">
@@ -57,11 +60,16 @@ export default function Header() {
             <Menu className="size-5" />
           </Button>
 
-          <Link className="shrink-0" href="/">
+          <motion.div
+            className="shrink-0 cursor-pointer"
+            onClick={handleNavigation("/")}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
             <span className="flex size-10 items-center justify-center rounded-full bg-[#1877F2] font-bold text-lg text-white">
               F
             </span>
-          </Link>
+          </motion.div>
 
           <div className="relative hidden md:block">
             <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -94,19 +102,19 @@ export default function Header() {
           {navigation.map((item) => {
             const isActive = pathname === item.path;
             return (
-              <Link href={item.path} key={item.name}>
-                <Button
-                  className={`relative size-10 rounded-lg sm:size-12 ${
-                    isActive
-                      ? "text-blue-500 after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-8 after:-translate-x-1/2 after:rounded-full after:bg-blue-500"
-                      : "text-muted-foreground hover:text-blue-500"
-                  }`}
-                  size="icon"
-                  variant="ghost"
-                >
-                  <item.icon className="size-5 sm:size-6" />
-                </Button>
-              </Link>
+              <Button
+                className={`relative size-10 rounded-lg sm:size-12 ${
+                  isActive
+                    ? "text-blue-500 after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-8 after:-translate-x-1/2 after:rounded-full after:bg-blue-500"
+                    : "text-muted-foreground hover:text-blue-500"
+                }`}
+                key={item.name}
+                onClick={handleNavigation(item.path)}
+                size="icon"
+                variant="ghost"
+              >
+                <item.icon className="size-5 sm:size-6" />
+              </Button>
             );
           })}
         </nav>
@@ -124,18 +132,14 @@ export default function Header() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
-              <Link href="/profile">
-                <DropdownMenuItem>
-                  <User className="size-4" />
-                  <span>Hồ sơ</span>
-                </DropdownMenuItem>
-              </Link>
-              <Link href="/messages">
-                <DropdownMenuItem>
-                  <MessageSquare className="size-4" />
-                  <span>Tin nhắn</span>
-                </DropdownMenuItem>
-              </Link>
+              <DropdownMenuItem onClick={handleNavigation("/user-profile")}>
+                <User className="size-4" />
+                <span>Hồ sơ</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleNavigation("/messages")}>
+                <MessageSquare className="size-4" />
+                <span>Tin nhắn</span>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
@@ -147,12 +151,10 @@ export default function Header() {
                 )}
                 <span>{theme === "light" ? "Chế độ tối" : "Chế độ sáng"}</span>
               </DropdownMenuItem>
-              <Link href="/settings">
-                <DropdownMenuItem>
-                  <Settings className="size-4" />
-                  <span>Cài đặt</span>
-                </DropdownMenuItem>
-              </Link>
+              <DropdownMenuItem onClick={handleNavigation("/settings")}>
+                <Settings className="size-4" />
+                <span>Cài đặt</span>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem variant="destructive">
                 <LogOut className="size-4" />
