@@ -3,6 +3,7 @@
 import {
   LayoutDashboard,
   LogOut,
+  Menu,
   MessageSquare,
   Moon,
   Search,
@@ -27,6 +28,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import useSidebarStore from "@/store/sidebarStore";
 
 const navigation = [
   { icon: LayoutDashboard, name: "Trang chủ", path: "/" },
@@ -39,12 +41,22 @@ export default function Header() {
   const { theme, setTheme } = useTheme();
   const [_isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const { toggleSidebar } = useSidebarStore();
 
   return (
     <header className="fixed top-0 right-0 left-0 z-50 h-16 border-b bg-background shadow-sm">
       <div className="mx-auto grid h-full grid-cols-3 items-center px-4">
         {/* Left: Logo + Search */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1 sm:gap-3">
+          <Button
+            className="lg:hidden"
+            onClick={toggleSidebar}
+            size="icon"
+            variant="ghost"
+          >
+            <Menu className="size-5" />
+          </Button>
+
           <Link className="shrink-0" href="/">
             <span className="flex size-10 items-center justify-center rounded-full bg-[#1877F2] font-bold text-lg text-white">
               F
@@ -78,7 +90,7 @@ export default function Header() {
         </div>
 
         {/* Center: Navigation */}
-        <nav className="flex items-center justify-center gap-6">
+        <nav className="flex items-center justify-center gap-1 sm:gap-6">
           {navigation.map((item) => {
             const isActive = pathname === item.path;
             return (
