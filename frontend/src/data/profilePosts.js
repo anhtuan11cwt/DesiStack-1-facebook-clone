@@ -1,0 +1,55 @@
+const profilePosts = [
+  {
+    caption: "Vừa hoàn thành dự án React mới! Cảm ơn mọi người đã ủng hộ 🚀",
+    comments: [
+      {
+        content: "Tuyệt vời!",
+        createdAt: "20 giờ trước",
+        id: 1,
+        user: { avatar: null, name: "Tran Thi B" },
+      },
+    ],
+    createdAt: "1 ngày trước",
+    id: 101,
+    likes: 56,
+    mediaSrc: "/demo/story-1.jpg",
+    mediaType: "image",
+    shares: 12,
+    user: { avatar: null, name: "Nguyen Van A" },
+  },
+  {
+    caption: "Cuối tuần thư giãn bên ly cà phê ☕",
+    comments: [],
+    createdAt: "2 ngày trước",
+    id: 102,
+    likes: 34,
+    mediaSrc: "/demo/story-2.jpg",
+    mediaType: "image",
+    shares: 5,
+    user: { avatar: null, name: "Nguyen Van A" },
+  },
+  {
+    caption: null,
+    comments: [],
+    createdAt: "3 ngày trước",
+    id: 103,
+    likes: 28,
+    mediaSrc: "/demo/story-3.jpg",
+    mediaType: "image",
+    shares: 3,
+    user: { avatar: null, name: "Nguyen Van A" },
+  },
+  {
+    caption: null,
+    comments: [],
+    createdAt: "5 ngày trước",
+    id: 104,
+    likes: 42,
+    mediaSrc: "/demo/story-4.jpg",
+    mediaType: "image",
+    shares: 8,
+    user: { avatar: null, name: "Nguyen Van A" },
+  },
+];
+
+export default profilePosts;

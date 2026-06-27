@@ -13,7 +13,7 @@ const menuItems = [
   { href: "/friends-list", icon: Users, title: "Bạn bè" },
   { href: "/video-feed", icon: Video, title: "Video" },
   { href: "/messages", icon: MessageCircle, title: "Tin nhắn" },
-  { href: "/profile", icon: User, title: "Hồ sơ" },
+  { href: "/profile", icon: User, title: "Trang cá nhân" },
   { href: "/notifications", icon: Bell, title: "Thông báo" },
 ];
 

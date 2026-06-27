@@ -124,14 +124,18 @@ export default function Header() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuItem>
-                <User className="size-4" />
-                <span>Hồ sơ</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <MessageSquare className="size-4" />
-                <span>Tin nhắn</span>
-              </DropdownMenuItem>
+              <Link href="/profile">
+                <DropdownMenuItem>
+                  <User className="size-4" />
+                  <span>Hồ sơ</span>
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/messages">
+                <DropdownMenuItem>
+                  <MessageSquare className="size-4" />
+                  <span>Tin nhắn</span>
+                </DropdownMenuItem>
+              </Link>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
@@ -143,10 +147,12 @@ export default function Header() {
                 )}
                 <span>{theme === "light" ? "Chế độ tối" : "Chế độ sáng"}</span>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Settings className="size-4" />
-                <span>Cài đặt</span>
-              </DropdownMenuItem>
+              <Link href="/settings">
+                <DropdownMenuItem>
+                  <Settings className="size-4" />
+                  <span>Cài đặt</span>
+                </DropdownMenuItem>
+              </Link>
               <DropdownMenuSeparator />
               <DropdownMenuItem variant="destructive">
                 <LogOut className="size-4" />

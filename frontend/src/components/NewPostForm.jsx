@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Image as ImageIcon, Smile, X } from "lucide-react";
+import { Image as ImageIcon, Send, Smile, X } from "lucide-react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useId, useRef, useState } from "react";
@@ -178,9 +178,10 @@ export default function NewPostForm({ isPostFormOpen, setIsPostFormOpen }) {
 
         {/* Post button */}
         <Button
-          className="w-full"
+          className="w-full gap-2"
           disabled={!postContent.trim() && !selectedFile}
         >
+          <Send className="size-4" />
           Đăng
         </Button>
       </DialogContent>
