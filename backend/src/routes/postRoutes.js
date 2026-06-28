@@ -38,8 +38,6 @@ const router = Router();
  *                 type: string
  *                 format: binary
  *                 description: File ảnh (jpg, png, gif) hoặc video (mp4, mov)
- *             required:
- *               - content
  *     responses:
  *       201:
  *         description: Tạo bài viết thành công

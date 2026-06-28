@@ -58,9 +58,12 @@ export const registerUser = async (req, res) => {
       maxAge: 90 * 24 * 60 * 60 * 1000,
     });
 
+    const userObj = newUser.toObject();
+    delete userObj.password;
+
     return responseHandler(res, 201, "Đăng ký thành công", {
       token,
-      user: newUser,
+      user: userObj,
     });
   } catch (error) {
     return responseHandler(res, 500, error.message);
@@ -88,9 +91,12 @@ export const loginUser = async (req, res) => {
       maxAge: 90 * 24 * 60 * 60 * 1000,
     });
 
+    const userObj = user.toObject();
+    delete userObj.password;
+
     return responseHandler(res, 200, "Đăng nhập thành công", {
       token,
-      user,
+      user: userObj,
     });
   } catch (error) {
     return responseHandler(res, 500, error.message);

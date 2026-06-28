@@ -351,7 +351,10 @@ export const updateUserProfile = async (req, res) => {
 
     await user.save();
 
-    return responseHandler(res, 200, "Cập nhật hồ sơ thành công", user);
+    const userObj = user.toObject();
+    delete userObj.password;
+
+    return responseHandler(res, 200, "Cập nhật hồ sơ thành công", userObj);
   } catch (error) {
     return responseHandler(res, 500, error.message);
   }
@@ -388,7 +391,10 @@ export const updateCoverPhoto = async (req, res) => {
     user.coverPhoto = uploadResult.secure_url;
     await user.save();
 
-    return responseHandler(res, 200, "Cập nhật ảnh bìa thành công", user);
+    const userObj = user.toObject();
+    delete userObj.password;
+
+    return responseHandler(res, 200, "Cập nhật ảnh bìa thành công", userObj);
   } catch (error) {
     return responseHandler(res, 500, error.message);
   }

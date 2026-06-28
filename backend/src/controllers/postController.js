@@ -229,10 +229,11 @@ export const sharePost = async (req, res) => {
     }
 
     const alreadyShared = post.shares.some((id) => id.toString() === userId);
-    if (!alreadyShared) {
-      post.shares.push(userId);
+    if (alreadyShared) {
+      return responseHandler(res, 400, "Bạn đã chia sẻ bài viết này rồi");
     }
 
+    post.shares.push(userId);
     post.shareCount += 1;
     await post.save();
 

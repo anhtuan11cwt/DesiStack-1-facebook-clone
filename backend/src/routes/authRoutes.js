@@ -78,9 +78,6 @@ const router = Router();
  *                         email:
  *                           type: string
  *                           example: tuan@gmail.com
- *                         password:
- *                           type: string
- *                           example: $2a$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36PQm4sEPhMNPfFhpYNXnS
  *                         gender:
  *                           type: string
  *                           example: male
@@ -199,9 +196,6 @@ router.post("/register", registerUser);
  *                         email:
  *                           type: string
  *                           example: tuan@gmail.com
- *                         password:
- *                           type: string
- *                           example: $2a$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36PQm4sEPhMNPfFhpYNXnS
  *                         gender:
  *                           type: string
  *                           example: male
@@ -285,7 +279,7 @@ router.post("/login", loginUser);
 /**
  * @openapi
  * /auth/logout:
- *   get:
+ *   post:
  *     tags:
  *       - Auth
  *     summary: Đăng xuất
@@ -307,6 +301,6 @@ router.post("/login", loginUser);
  *                   nullable: true
  *                   example: null
  */
-router.get("/logout", logoutUser);
+router.post("/logout", logoutUser);
 
 export default router;

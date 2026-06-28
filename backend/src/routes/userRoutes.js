@@ -329,6 +329,8 @@ router.get("/mutual-friends", authMiddleware, getAllMutualFriends);
  *     tags:
  *       - Users
  *     summary: Lấy tất cả người dùng
+ *     security:
+ *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: Danh sách người dùng
@@ -394,7 +396,7 @@ router.get("/mutual-friends", authMiddleware, getAllMutualFriends);
  *                         type: number
  *                         example: 0
  */
-router.get("/", getAllUsers);
+router.get("/", authMiddleware, getAllUsers);
 
 /**
  * @openapi
