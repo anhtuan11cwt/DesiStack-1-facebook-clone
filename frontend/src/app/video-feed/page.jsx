@@ -29,7 +29,7 @@ export default function VideoFeedPage() {
 
       <main className="min-h-screen bg-background pt-16">
         <div className="mx-auto flex max-w-[1600px] gap-6 px-4 lg:px-6">
-          <div className="min-w-0 flex-1 md:ml-72">
+          <div className="min-w-0 flex-1 lg:ml-72">
             <div className="mx-auto max-w-3xl space-y-8 py-4">
               <Button
                 className="flex items-center gap-2"

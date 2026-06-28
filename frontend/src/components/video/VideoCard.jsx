@@ -10,7 +10,7 @@ import {
   Link2,
   MessageCircle,
   MoreHorizontal,
-  Share2,
+  Send,
   ThumbsUp,
 } from "lucide-react";
 import { useState } from "react";
@@ -184,7 +184,7 @@ export default function VideoCard({ video }) {
             onClick={() => setIsShareOpen(true)}
             variant="ghost"
           >
-            <Share2 className="size-5" />
+            <Send className="size-5" />
             <span>Chia sẻ</span>
           </Button>
         </div>

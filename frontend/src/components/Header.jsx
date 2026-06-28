@@ -88,7 +88,7 @@ export default function Header() {
             </span>
           </motion.div>
 
-          <div className="relative hidden md:block">
+          <div className="relative hidden lg:block">
             <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               className="w-56 rounded-full pl-10 lg:w-64"
@@ -101,7 +101,7 @@ export default function Header() {
           </div>
 
           <Button
-            className="md:hidden"
+            className="lg:hidden"
             onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
             size="icon"
             variant="ghost"
@@ -184,7 +184,7 @@ export default function Header() {
 
       {/* Mobile search bar */}
       {isMobileSearchOpen && (
-        <div className="border-t bg-background px-4 py-2 md:hidden">
+        <div className="border-t bg-background px-4 py-2 lg:hidden">
           <div className="relative">
             <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
