@@ -1,6 +1,8 @@
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
+import AuthWrapper from "@/components/AuthWrapper";
 import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -36,7 +38,10 @@ export default function RootLayout({ children }) {
     >
       <body className="flex min-h-full flex-col">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
+          <AuthWrapper>
+            <Toaster position="top-right" />
+            {children}
+          </AuthWrapper>
         </ThemeProvider>
       </body>
     </html>

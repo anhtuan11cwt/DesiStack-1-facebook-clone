@@ -5,6 +5,7 @@ import { Eye, EyeOff, UserPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -16,10 +17,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
+import { registerUser } from "@/services/authService";
 import { registerSchema } from "@/validation/registerSchema";
 
-export default function SignupForm({ className, ...props }) {
-  const router = useRouter();
+export default function SignupForm({
+  className,
+  onSubmittingChange,
+  onSuccess,
+  ...props
+}) {
+  const _router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const maxDate = new Date();
   maxDate.setFullYear(maxDate.getFullYear() - 18);
@@ -30,16 +37,26 @@ export default function SignupForm({ className, ...props }) {
     handleSubmit,
     control,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     mode: "onBlur",
     resolver: yupResolver(registerSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log("Register data:", data);
-    reset();
-    router.push("/");
+  const onSubmit = async (data) => {
+    onSubmittingChange?.(true);
+
+    try {
+      const res = await registerUser(data);
+
+      toast.success(res.message);
+      reset();
+      onSuccess?.(); // Chuyển sang tab đăng nhập
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Registration failed");
+    } finally {
+      onSubmittingChange?.(false);
+    }
   };
 
   return (
@@ -59,6 +76,7 @@ export default function SignupForm({ className, ...props }) {
         <Field>
           <FieldLabel htmlFor="register-username">Tên người dùng</FieldLabel>
           <Input
+            disabled={isSubmitting}
             id="register-username"
             placeholder="johndoe"
             {...register("username")}
@@ -71,6 +89,7 @@ export default function SignupForm({ className, ...props }) {
         <Field>
           <FieldLabel htmlFor="register-email">Email</FieldLabel>
           <Input
+            disabled={isSubmitting}
             id="register-email"
             placeholder="m@example.com"
             type="email"
@@ -83,12 +102,14 @@ export default function SignupForm({ className, ...props }) {
           <FieldLabel htmlFor="register-password">Mật khẩu</FieldLabel>
           <div className="relative">
             <Input
+              disabled={isSubmitting}
               id="register-password"
               type={showPassword ? "text" : "password"}
               {...register("password")}
             />
             <button
-              className="absolute top-1/2 right-2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              className="absolute top-1/2 right-2 -translate-y-1/2 text-muted-foreground hover:text-foreground disabled:pointer-events-none disabled:opacity-50"
+              disabled={isSubmitting}
               onClick={() => setShowPassword(!showPassword)}
               tabIndex={-1}
               type="button"
@@ -109,6 +130,7 @@ export default function SignupForm({ className, ...props }) {
         <Field>
           <FieldLabel htmlFor="register-dob">Ngày sinh</FieldLabel>
           <Input
+            disabled={isSubmitting}
             id="register-dob"
             max={maxDateStr}
             type="date"
@@ -127,15 +149,34 @@ export default function SignupForm({ className, ...props }) {
             render={({ field }) => (
               <RadioGroup
                 defaultValue={field.value}
+                disabled={isSubmitting}
                 onValueChange={field.onChange}
               >
                 <div className="flex items-center gap-2">
-                  <RadioGroupItem id="male" value="male" />
-                  <FieldLabel htmlFor="male">Nam</FieldLabel>
+                  <RadioGroupItem
+                    disabled={isSubmitting}
+                    id="male"
+                    value="male"
+                  />
+                  <FieldLabel
+                    className={isSubmitting ? "opacity-50" : ""}
+                    htmlFor="male"
+                  >
+                    Nam
+                  </FieldLabel>
                 </div>
                 <div className="flex items-center gap-2">
-                  <RadioGroupItem id="female" value="female" />
-                  <FieldLabel htmlFor="female">Nữ</FieldLabel>
+                  <RadioGroupItem
+                    disabled={isSubmitting}
+                    id="female"
+                    value="female"
+                  />
+                  <FieldLabel
+                    className={isSubmitting ? "opacity-50" : ""}
+                    htmlFor="female"
+                  >
+                    Nữ
+                  </FieldLabel>
                 </div>
               </RadioGroup>
             )}
@@ -144,9 +185,13 @@ export default function SignupForm({ className, ...props }) {
         </Field>
 
         <Field>
-          <Button className="w-full gap-2" type="submit">
+          <Button
+            className="w-full gap-2"
+            disabled={isSubmitting}
+            type="submit"
+          >
             <UserPlus className="size-4" />
-            Tạo tài khoản
+            {isSubmitting ? "Đang xử lý..." : "Tạo tài khoản"}
           </Button>
         </Field>
       </FieldGroup>

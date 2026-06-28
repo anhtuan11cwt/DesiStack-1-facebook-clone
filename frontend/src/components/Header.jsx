@@ -18,6 +18,7 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,7 +29,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { logoutUser } from "@/services/authService";
 import useSidebarStore from "@/store/sidebarStore";
+import useUserStore from "@/store/userStore";
 
 const navigation = [
   { icon: LayoutDashboard, name: "Trang chủ", path: "/" },
@@ -43,8 +46,22 @@ export default function Header() {
   const [_isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const { toggleSidebar } = useSidebarStore();
+  const { user, clearUser } = useUserStore();
 
   const handleNavigation = (path) => () => router.push(path);
+
+  // Xoá cookie + xoá store + đẩy về login
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+
+      clearUser();
+      toast.success("Đã đăng xuất");
+      router.replace("/user-login");
+    } catch {
+      toast.error("Đăng xuất thất bại");
+    }
+  };
 
   return (
     <header className="fixed top-0 right-0 left-0 z-50 h-16 border-b bg-background shadow-sm">
@@ -126,7 +143,7 @@ export default function Header() {
               <Button className="size-10 rounded-full p-0" variant="ghost">
                 <Avatar>
                   <AvatarFallback className="bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300">
-                    U
+                    {user?.username?.charAt(0)?.toUpperCase() || "U"}
                   </AvatarFallback>
                 </Avatar>
               </Button>
@@ -156,7 +173,7 @@ export default function Header() {
                 <span>Cài đặt</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem variant="destructive">
+              <DropdownMenuItem onClick={handleLogout} variant="destructive">
                 <LogOut className="size-4" />
                 <span>Đăng xuất</span>
               </DropdownMenuItem>

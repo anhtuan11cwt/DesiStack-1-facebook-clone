@@ -1,11 +1,23 @@
 "use client";
 
-import { Bell, Home, MessageCircle, User, Users, Video } from "lucide-react";
+import {
+  Bell,
+  Home,
+  LogOut,
+  MessageCircle,
+  User,
+  Users,
+  Video,
+} from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
+
+import toast from "react-hot-toast";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { logoutUser } from "@/services/authService";
 import useSidebarStore from "@/store/sidebarStore";
+import useUserStore from "@/store/userStore";
 
 const menuItems = [
   { href: "/", icon: Home, title: "Trang chủ" },
@@ -20,6 +32,20 @@ export default function LeftSidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const { isSidebarOpen, closeSidebar } = useSidebarStore();
+  const { user, clearUser } = useUserStore();
+
+  // Xoá cookie + xoá store + đẩy về login
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+
+      clearUser();
+      toast.success("Đã đăng xuất");
+      router.replace("/user-login");
+    } catch {
+      toast.error("Đăng xuất thất bại");
+    }
+  };
 
   return (
     <>
@@ -40,12 +66,21 @@ export default function LeftSidebar() {
       >
         {/* User info */}
         <div className="flex items-center gap-3 px-4 py-5">
-          <Avatar className="size-12">
-            <AvatarFallback className="bg-blue-100 text-blue-600 text-lg dark:bg-blue-900 dark:text-blue-300">
-              U
-            </AvatarFallback>
-          </Avatar>
-          <span className="font-semibold text-base">Người dùng Facebook</span>
+          {user ? (
+            <>
+              <Avatar className="size-12">
+                <AvatarFallback className="bg-blue-100 text-blue-600 text-lg dark:bg-blue-900 dark:text-blue-300">
+                  {user.username?.charAt(0)?.toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <span className="font-semibold text-base">{user.username}</span>
+            </>
+          ) : (
+            <div className="flex items-center gap-3">
+              <div className="size-12 animate-pulse rounded-full bg-muted" />
+              <div className="h-5 w-32 animate-pulse rounded-md bg-muted" />
+            </div>
+          )}
         </div>
 
         <Separator />
@@ -76,22 +111,44 @@ export default function LeftSidebar() {
           </ul>
         </nav>
 
-        <Separator />
+        {/* Logout */}
+        <div className="border-t px-2 py-1">
+          <Button
+            className="w-full justify-start gap-3 text-muted-foreground hover:text-red-500"
+            onClick={handleLogout}
+            variant="ghost"
+          >
+            <LogOut className="size-5" />
+            <span>Đăng xuất</span>
+          </Button>
+        </div>
 
         {/* Footer */}
-        <div className="absolute bottom-0 left-0 w-full border-t p-4">
+        <div className="border-t p-4">
           <div className="flex items-center gap-3">
-            <Avatar className="size-8">
-              <AvatarFallback className="bg-blue-100 text-blue-600 text-xs dark:bg-blue-900 dark:text-blue-300">
-                U
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex flex-col">
-              <span className="font-medium text-sm">Người dùng Facebook</span>
-              <span className="text-muted-foreground text-xs">
-                user@facebook.com
-              </span>
-            </div>
+            {user ? (
+              <>
+                <Avatar className="size-8">
+                  <AvatarFallback className="bg-blue-100 text-blue-600 text-xs dark:bg-blue-900 dark:text-blue-300">
+                    {user.username?.charAt(0)?.toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col">
+                  <span className="font-medium text-sm">{user.username}</span>
+                  <span className="text-muted-foreground text-xs">
+                    {user.email}
+                  </span>
+                </div>
+              </>
+            ) : (
+              <div className="flex items-center gap-3">
+                <div className="size-8 animate-pulse rounded-full bg-muted" />
+                <div className="flex flex-col gap-1">
+                  <div className="h-4 w-24 animate-pulse rounded-md bg-muted" />
+                  <div className="h-3 w-32 animate-pulse rounded-md bg-muted" />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </aside>
