@@ -1,9 +1,11 @@
-const express = require("express");
-const cookieParser = require("cookie-parser");
-const cors = require("cors");
-const dotenv = require("dotenv");
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import dotenv from "dotenv";
+import express from "express";
 
 dotenv.config();
+
+import connectDB from "./config/db.js";
 
 const app = express();
 
@@ -15,6 +17,8 @@ app.use(
     origin: process.env.CLIENT_URL || "http://localhost:3000",
   }),
 );
+
+connectDB();
 
 const port = process.env.PORT || 8080;
 
